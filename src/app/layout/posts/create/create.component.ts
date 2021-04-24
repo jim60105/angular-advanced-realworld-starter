@@ -1,5 +1,9 @@
+import { PostService } from './../../../post.service';
+import { HttpClient } from '@angular/common/http';
+import { Route } from '@angular/compiler/src/core';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, NgForm, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   templateUrl: './create.component.html',
@@ -9,7 +13,10 @@ export class CreateComponent implements OnInit {
 
   form: FormGroup;
   constructor(
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private route: ActivatedRoute,
+    private router: Router,
+    private postServices: PostService
   ) { }
 
   ngOnInit(): void {
@@ -42,7 +49,9 @@ export class CreateComponent implements OnInit {
   }
 
   onSubmit(form: NgForm) {
-    console.log(form);
+    this.postServices.createArticle(form.value).subscribe(result => {
+      this.router.navigateByUrl('/');
+    })
   }
 
 }
