@@ -1,3 +1,6 @@
+import { Router, RouterModule } from '@angular/router';
+import { UserLoginInfo } from './../../interfaces/login-info';
+import { LoginService } from './../../login.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -6,9 +9,26 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LoginComponent implements OnInit {
 
-  constructor() { }
+  user: UserLoginInfo = {
+    email : "",
+    password: ""
+  }
+  constructor(
+    private loginService: LoginService,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
+  }
+
+  login() {
+    this.loginService.login(this.user).subscribe(
+      x => {
+        localStorage.setItem('token',x.user.token);
+        this.router.navigateByUrl('/');
+      }
+    )
+
   }
 
 }
