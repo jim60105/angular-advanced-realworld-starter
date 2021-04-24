@@ -2,12 +2,13 @@
   <div class="container page">
     <div class="row">
       <div class="col-md-10 col-md-offset-1 col-xs-12">
-        <form>
+        <form [formGroup]="form" (ngSubmit)="onSubmit(mForm)" #mForm="ngForm">
           <fieldset class="form-group">
             <input
               class="form-control form-control-lg"
               type="text"
               placeholder="Post Title"
+              formControlName="title"
             />
           </fieldset>
           <fieldset class="form-group">
@@ -15,6 +16,7 @@
               class="form-control"
               rows="3"
               placeholder="Description"
+              formControlName="description"
             ></textarea>
           </fieldset>
           <fieldset class="form-group">
@@ -22,19 +24,18 @@
               class="form-control"
               rows="8"
               placeholder="Post body"
+              formControlName="body"
             ></textarea>
           </fieldset>
           <fieldset class="form-group">
-            <input class="form-control" type="text" placeholder="Enter tags" />
-            <div class="tag-list">
-              <span class="label label-pill label-default">
-                <i class="ion-close-round"></i> programming</span
-              >
-              <span class="label label-pill label-default">
-                <i class="ion-close-round"></i> javascript</span
-              >
-              <span class="label label-pill label-default">
-                <i class="ion-close-round"></i> webdev</span
+            <input class="form-control" type="text" placeholder="Enter tags"
+            formArrayName="tags" #mTag
+            (keyup.enter)="addTag(mTag.value); mTag.value=''"
+            (keydown.enter)="$event.preventDefault()"/>
+            <div class="tag-list" *ngFor="let item of getTags().controls let i = index">
+              <span class="label label-pill label-default"
+              (click)="removeTag(i)">
+                <i class="ion-close-round"></i> {{item.value }}</span
               >
             </div>
           </fieldset>
