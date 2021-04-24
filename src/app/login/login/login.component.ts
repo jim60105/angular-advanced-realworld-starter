@@ -1,4 +1,4 @@
-import { Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { UserLoginInfo } from './../../interfaces/login-info';
 import { LoginService } from './../../login.service';
 import { Component, OnInit } from '@angular/core';
@@ -13,19 +13,26 @@ export class LoginComponent implements OnInit {
     email : "",
     password: ""
   }
+
+  redirectUrl = '/';
   constructor(
     private loginService: LoginService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
+    this.route.queryParamMap.subscribe(map => {
+      this.redirectUrl = map.get('redirect');
+    })
+
   }
 
   login() {
     this.loginService.login(this.user).subscribe(
       x => {
         localStorage.setItem('token',x.user.token);
-        this.router.navigateByUrl('/');
+        this.router.navigateByUrl(this.redirectUrl);
       }
     )
 
